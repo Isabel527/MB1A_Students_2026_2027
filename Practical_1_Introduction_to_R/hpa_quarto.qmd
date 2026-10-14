@@ -1,0 +1,23 @@
+---
+title: "Practical 1 - Brain summary"
+---
+
+The total number of genes with regionally elevated expression in the forebrain, in each of the three organisms (human, pig and mouse), can be calculated as follows:
+
+Human
+```{r}
+sum(180, 83, 57, 110)
+# This is a comment
+```
+
+Pig
+```{r}
+sum(109, 157, 31, 45)
+```
+Mouse
+```{r}
+sum(55, 185, 60, 98)
+```
+The human therefore had the highest number of genes with regionally elevated expression.
+
+# This is a comment

@@ -6,7 +6,6 @@ title: "Worked example"
 library(gt)
 library(tidyverse)
 library(maps)
-library(readr)
 
 ```
 
@@ -16,6 +15,35 @@ gt(bird_breeding_sites)
 ```
 
 ```{r}
+colnames(bird_breeding_sites)
+```
+```{r}
+glimpse(bird_breeding_sites)
+```
+```{r}
+print(nrow(bird_breeding_sites))
+print(ncol(bird_breeding_sites))
+print(dim(bird_breeding_sites))
+```
+```{r}
+bird_migration_sites <- read_csv("data/migratory_connectivity_dataset.csv")
+gt(head(bird_migration_sites))
+```
+```{r}
+glimpse(bird_migration_sites)
+```
+```{r}
+colnames(bird_migration_sites)
+```
+
+```{r}
+bird_breeding_selected <- bird_breeding_sites |>
+  select(Site, Longitude, Latitude) |>
+  distinct()
+
+gt(bird_breeding_selected)
+```
+```{r}
 bird_breeding_selected <- bird_breeding_sites |>
   select(Site, Longitude, Latitude) |>
   distinct() |>
@@ -23,5 +51,70 @@ bird_breeding_selected <- bird_breeding_sites |>
 
 gt(bird_breeding_selected)
 
+```
+
+
+```{r}
+bird_migration_selected <- bird_migration_sites|>
+  select(
+    Site,
+    winterLongitude,
+    winterLatitude,
+    pslon,
+    pslat,
+    iblon,
+    iblat,
+    awestlon,
+    awestlat
+  ) |>
+  distinct() |>
+  rename(
+    Winter_Longitude = winterLongitude,
+    Winter_Latitude = winterLatitude,
+    Stopover_Longitude = pslon,
+    Stopover_Latitude = pslat,
+    Iberian_Longitude = iblon,
+    Iberian_Latitude = iblat,
+    Westmost_Longitude = awestlon,
+    Westmost_Latitude = awestlat
+  )
+
+gt(head(bird_migration_selected))
+```
+
+
+
+```{r}
+bird_breeding_dartmoor <- bird_breeding_selected |> filter(Site == "Dartmoor")
+
+gt(bird_breeding_dartmoor)
+```
+```{r}
+bird_breeding_not_dartmoor <- bird_breeding_selected |> filter(Site != "Dartmoor")
+
+gt(bird_breeding_not_dartmoor)
+```
+
+```{r}
+bird_breeding_exc <- bird_breeding_selected |> filter(Site != "Spain")
+
+gt(bird_breeding_exc)
+```
+
+```{r}
+bird_migration_exc <- bird_migration_selected |> filter(Site != "Spain")
+
+gt(bird_migration_exc)
+```
+
+```{r}
+bird_migration_grouped <- bird_migration_exc |> group_by(Site)
+
+glimpse(bird_migration_grouped)
+```
+```{r}
+lat_df <- bird_migration_grouped |>
+  summarise(Highest_Lat_Stopover = max(Stopover_Latitude), na.rm = TRUE)
+gt(lat_df)
 ```
 
